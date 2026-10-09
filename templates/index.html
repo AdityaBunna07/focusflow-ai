@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FocusFlow AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">GEMMA 4 PRODUCTIVITY OPERATIONS AGENT</p>
+          <h1>FocusFlow<span>AI</span></h1>
+          <p class="intro">Turn a messy workload into a practical plan, then adapt it when your day changes.</p>
+        </div>
+        <div class="model-badge"><span class="dot"></span> Gemma 4 + local tools</div>
+      </header>
+
+      <section class="grid">
+        <form id="planner-form" class="card planner" novalidate>
+          <div class="section-heading">
+            <p class="step">01 / UNDERSTAND</p>
+            <h2>What needs doing?</h2>
+          </div>
+          <label for="request">Your unstructured workload</label>
+          <textarea id="request" name="request" required placeholder="I need to finish my Python project by Friday, prepare 10 slides, reply to my mentor, and I only have two hours today."></textarea>
+          <div class="form-row">
+            <div>
+              <label for="hours">Hours available each day</label>
+              <input id="hours" name="hours" type="number" min="0.5" max="12" step="0.5" value="2">
+            </div>
+            <div>
+              <label for="plan-start">Plan starts</label>
+              <input id="plan-start" name="plan-start" type="date">
+            </div>
+          </div>
+          <button id="create-button" type="submit">Create action plan <span>→</span></button>
+          <p id="form-error" class="error" role="alert" hidden></p>
+          <p class="privacy">Your exports are generated locally. FocusFlow never sends email or edits your calendar.</p>
+        </form>
+
+        <aside class="card history">
+          <div class="section-heading">
+            <p class="step">PLAN HISTORY</p>
+            <h2>Saved locally</h2>
+          </div>
+          <div id="history-list" class="history-list"><p class="muted">Loading saved plans…</p></div>
+        </aside>
+      </section>
+
+      <section id="loader" class="loader" hidden aria-live="polite">
+        <span class="spinner"></span>
+        <div><strong>Gemma is understanding your workload</strong><p>Extracting tasks, weighing deadlines, and scheduling focus blocks.</p></div>
+      </section>
+
+      <section id="plan-output" class="plan-output" hidden>
+        <div class="result-header">
+          <div>
+            <p class="step">02 / PLAN</p>
+            <h2>Your action plan</h2>
+            <p id="summary" class="summary"></p>
+          </div>
+          <div class="legend"><span></span> Priority score combines urgency, importance, and quick wins.</div>
+        </div>
+        <p id="clarifying-question" class="question" hidden></p>
+        <div id="schedule" class="schedule"></div>
+
+        <section class="approval card">
+          <div>
+            <p class="step">03 / APPROVE EXPORT</p>
+            <h2>You stay in control.</h2>
+            <p>Downloads happen only after you select one. Nothing is sent to an outside service.</p>
+          </div>
+          <div class="export-actions">
+            <button class="secondary" id="download-checklist" type="button">Checklist (.md)</button>
+            <button id="download-calendar" type="button">Approve & download calendar (.ics)</button>
+          </div>
+        </section>
+
+        <section class="execution card">
+          <div class="execution-header">
+            <div>
+              <p class="step">04 / EXECUTE</p>
+              <h2>Perform approved actions.</h2>
+              <p>Review every action below. Calendar events and Gmail messages are never sent automatically.</p>
+            </div>
+            <div class="google-connection">
+              <span id="google-status" class="connection-status">Checking Google connection…</span>
+              <a id="google-connect" class="connect-link" href="/auth/google/connect" hidden>Connect Google</a>
+            </div>
+          </div>
+          <p id="execution-status" class="execution-status" hidden></p>
+          <div id="execution-actions" class="execution-actions"></div>
+        </section>
+
+        <section class="replan card">
+          <div class="section-heading">
+            <p class="step">05 / RECOVER</p>
+            <h2>Missed some work?</h2>
+          </div>
+          <p>Select incomplete tasks and FocusFlow will schedule them again from your chosen date.</p>
+          <div id="missed-tasks" class="missed-tasks"></div>
+          <div class="replan-actions">
+            <label>Restart planning on <input id="restart-day" type="date"></label>
+            <button class="secondary" id="replan-button" type="button">Replan incomplete work</button>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer>FocusFlow AI · Open-source productivity agent · Review model output before acting.</footer>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
